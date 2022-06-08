@@ -5,5 +5,7 @@
 [ -n "$CI" ] && exit 0
 
 # Format and submit code according to lintstagedrc.js configuration
-# npm run lint:eslint
-npx lint-staged
+npm run lint:prettier
+npm run lint:eslint
+# npm test
+# git add .
