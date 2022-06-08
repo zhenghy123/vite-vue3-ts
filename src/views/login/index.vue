@@ -3,7 +3,8 @@
     <a-card class="login" :bordered="false" :body-style="{ width: '480px', padding: '30px 0' }">
       <div class="login_right_container">
         <div class="title_box">
-          <h2 class="title">账密登录</h2>
+          <h2 class="title">
+            账密登录</h2>
         </div>
         <!-- form -->
         <login-form />
