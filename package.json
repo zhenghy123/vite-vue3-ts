@@ -39,9 +39,7 @@
     "lint:prettier": "prettier --write  \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
     "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
     "reinstall": "rimraf yarn.lock && rimraf package.lock.json && rimraf node_modules && npm run bootstrap",
-    "prepare": "husky install",
-    "prettier": "prettier --write --loglevel log src/**/*.{js,json,tsx,css,less,scss,vue,html,md,ts}"
-
+    "prepare": "husky install"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.0.1",
@@ -76,10 +74,10 @@
     "eslint-plugin-jest": "^25.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^7.17.0",
-    "husky": "^7.0.4",
+    "husky": "^8.0.1",
     "jest": "^27.4.2",
     "less": "^4.1.2",
-    "lint-staged": "^11.2.6",
+    "lint-staged": "^13.0.0",
     "mockjs": "^1.1.0",
     "postcss": "^8.3.11",
     "postcss-html": "^1.2.0",
@@ -98,10 +96,15 @@
     "vue-eslint-parser": "^7.11.0",
     "vue-tsc": "^0.3.0"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
-    "*.{vue,js,ts,tsx,jsx}": [
-      "eslint --fix",
-      "prettier --write --ignore-unknown"
+    "src/**/*.{js,ts,vue,tsx}": [
+      "eslint",
+      "prettier --write"
     ]
   }
 }
