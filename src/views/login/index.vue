@@ -5,7 +5,7 @@
         <div class="title_box">
           <h2 class="title">
 
-            账密 登录</h2>
+            账密 登 录</h2>
         </div>
         <!-- form -->
         <login-form />
