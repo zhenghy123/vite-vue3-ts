@@ -5,5 +5,4 @@
 [ -n "$CI" ] && exit 0
 
 # Format and submit code according to lintstagedrc.js configuration
-npm run lint:lint-staged
-npm test 1
+npm run lint:lint-staged --no-stash
