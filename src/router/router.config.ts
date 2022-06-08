@@ -81,7 +81,7 @@ const constantRoutes: RouteRecordRaw[] = [
       title: 'Root',
     },
   },
-  // ...accessRoutes,
+  ...accessRoutes,
 ];
 
 export const publicRoutes = [

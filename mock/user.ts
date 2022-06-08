@@ -43,10 +43,11 @@ export default [
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
-      const { username, password } = body;
-      const checkUser = createFakeUserList().find(
-        (item) => item.username === username && password === item.password,
-      );
+      // const { username, password } = body;
+      // const checkUser = createFakeUserList().find(
+      //   (item) => item.username === username && password === item.password,
+      // );
+      const checkUser = createFakeUserList()[0];
       if (!checkUser) {
         return resultError('Incorrect account or password！');
       }

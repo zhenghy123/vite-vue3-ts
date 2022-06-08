@@ -42,7 +42,7 @@
         <a-button html-type="submit" class="btn" :loading="loading">立即登录</a-button>
       </a-form-item>
     </a-form>
-    <p class="copyright">@copyright JS-banana</p>
+    <!-- <p class="copyright">@copyright JS-banana</p> -->
   </div>
 </template>
 <script setup lang="ts">
