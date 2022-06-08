@@ -39,51 +39,52 @@
   </a-layout>
 </template>
 <script setup lang="ts">
-  import { Route } from 'ant-design-vue/es/breadcrumb/Breadcrumb';
-  import Header from './components/Header.vue';
-  import SideMenu from './components/SideMenu';
-  import { clearMenuItem, filterRoutes } from './utils';
+import { Route } from "ant-design-vue/es/breadcrumb/Breadcrumb";
+import Header from './components/Header.vue';
+import SideMenu from './components/SideMenu';
+import { clearMenuItem, filterRoutes } from './utils';
 
-  const router = useRouter();
+const router = useRouter();
 
-  const menuData = filterRoutes(
-    clearMenuItem(router.getRoutes()).filter((n) => n.path.startsWith('/app/')),
-  );
+const menuData = filterRoutes(
+  clearMenuItem(router.getRoutes()).filter((n) => n.path.startsWith('/app/')),
+);
 
-  const layoutConf = reactive({
-    theme: 'light',
-    menuWidth: 208,
-    menuData,
-  });
+const layoutConf = reactive({
+  theme: 'light',
+  menuWidth: 208,
+  menuData,
+});
 
-  const routeMeta = computed(() => router.currentRoute.value.meta);
+const routeMeta = computed(() => router.currentRoute.value.meta);
 
-  const breadcrumb = computed(
-    () =>
-      router.currentRoute.value.matched
-        .filter((n) => !['/', '/app'].includes(n.path))
-        .map((item) => {
-          return {
-            path: item.path,
-            breadcrumbName: item.meta.title || '',
-          };
-        }) as Route[],
-  );
-  const handleBreadcrumb = () => {
-    const path = breadcrumb.value?.[breadcrumb.value.length - 2]?.path;
-    path && router.push(path);
-  };
+const breadcrumb = computed(
+  () =>
+    router.currentRoute.value.matched
+      .filter((n) => !['/', '/app'].includes(n.path))
+      .map((item) => {
+        return {
+          path: item.path,
+          breadcrumbName: item.meta.title || '',
+        };
+      }) as Route[],
+);
+const handleBreadcrumb = () => {
+  const path = breadcrumb.value?.[breadcrumb.value.length - 2]?.path;
+  path && router.push(path);
+};
 </script>
 <style lang="less" scoped>
-  .basicLayout-wrap {
-    height: 100vh;
-    overflow: hidden;
-    .basicLayout-content {
-      height: calc(100vh - 80px);
-      overflow-y: auto;
-      margin: 0;
-      padding: 24px;
-      background: '#F0F1F4';
-    }
+.basicLayout-wrap {
+  height: 100vh;
+  overflow: hidden;
+
+  .basicLayout-content {
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 24px;
+    background: '#F0F1F4';
   }
+}
 </style>
