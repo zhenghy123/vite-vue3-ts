@@ -8,14 +8,14 @@ const { createMessage } = useMessage();
 // baseURL
 const BASE_URL = import.meta.env.MODE === 'development' ? API_PREFIX : '';
 
-const instance = axios.create({
-  baseURL: BASE_URL,
+export const http = axios.create({
+  // baseURL: BASE_URL,
   withCredentials: true,
   timeout: 10000,
 });
 
 // 请求拦截
-instance.interceptors.request.use(
+http.interceptors.request.use(
   (config: any) => {
     // 请求头 token配置
     const token = getToken();
@@ -30,11 +30,11 @@ instance.interceptors.request.use(
 );
 
 // 响应拦截
-instance.interceptors.response.use(
+http.interceptors.response.use(
   (response) => {
     const code = response.data.code;
     if (['90000', '0', 'success', '200'].includes(code)) {
-      return response;
+      return response.data;
     } else {
       createMessage.error(response.data.msg);
       return Promise.reject(response.data.msg);
@@ -49,7 +49,7 @@ instance.interceptors.response.use(
         case 401:
           errMsg = '登录状态失效，请重新登录';
           // sessionStorage.removeItem('token');
-          router.push('/login');
+          // router.push('/login');
           break;
         case 403:
           errMsg = '拒绝访问';
@@ -91,18 +91,18 @@ const request = <T = any>(
 ): Promise<T> => {
   if (typeof config === 'string') {
     if (!options) {
-      return instance.request<T, T>({
+      return http.request<T, T>({
         url: config,
       });
       // throw new Error('请配置正确的请求参数');
     } else {
-      return instance.request<T, T>({
+      return http.request<T, T>({
         url: config,
         ...options,
       });
     }
   } else {
-    return instance.request<T, T>(config);
+    return http.request<T, T>(config);
   }
 };
 export function get<T = any>(config: AxiosRequestConfig, options?: AxiosRequestConfig): Promise<T> {

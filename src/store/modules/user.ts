@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { ReqParams } from '/@/api/user/model';
-import fetchApi from '/@/api/user';
 // import { encryptByDES } from '/@/utils/crypto';
 import { getToken, setToken, removeToken } from '/@/utils/auth';
 import { router } from '/@/router';
@@ -42,12 +41,6 @@ export const useUserStore = defineStore({
     async login(params: ReqParams) {
       // 密码加密
       // params.password = encryptByDES(params.password);
-      const res = await fetchApi.login(params);
-      if (res) {
-        // save token
-        this.setToken(res.token);
-      }
-      return res;
     },
 
     /**

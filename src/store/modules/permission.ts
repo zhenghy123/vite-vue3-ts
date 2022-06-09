@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
-import fetchApi from '/@/api/user';
 import { RouteRecordRaw } from 'vue-router';
 import constantRoutes, { accessRoutes, publicRoutes } from '/@/router/router.config';
 import { filterAsyncRoutes } from '/@/utils/permission';
@@ -65,14 +64,7 @@ export const usePermissioStore = defineStore({
      * @name fetchAuths
      * @description 获取当前用户权限
      */
-    async fetchAuths() {
-      const res = await fetchApi.permission();
-      if (res) {
-        this.setAuth(res.auths, res.modules);
-        this.setIsAdmin(res.is_admin || 0);
-      }
-      return res;
-    },
+    async fetchAuths() {},
 
     /**
      * @name buildRoutesAction

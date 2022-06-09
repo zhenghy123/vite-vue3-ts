@@ -7,6 +7,6 @@ export const router = createRouter({
   // https://juejin.cn/post/7051826951463370760#heading-27
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  strict: true,
+  // strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),
 });
