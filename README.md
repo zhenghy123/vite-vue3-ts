@@ -1,7 +1,5 @@
 # vite-vue3-ts
 
-[![ci](https://github.com/JS-banana/vite-vue3-ts/actions/workflows/deploy.yml/badge.svg)](https://github.com/JS-banana/vite-vue3-ts/actions/workflows/deploy.yml)
-
 ## 介绍
 
 一个使用 `vite` + `vue3` + `pinia` + `ant-design-vue` + `typescript` 完整技术路线开发的项目，秒级开发更新启动、新的`vue3 composition api` 结合 `setup`纵享丝滑般的开发体验、全新的 `pinia`状态管理器和优秀的设计体验（`1k`的size）、`antd`无障碍过渡使用UI组件库 `ant-design-vue`、安全高效的 `typescript`类型支持、代码规范验证、多级别的权限管理~
@@ -77,26 +75,91 @@
 
 ![vite-vue3-3](https://cdn.jsdelivr.net/gh/JS-banana/images/vuepress/vite-vue3-3.jpg)
 
-![vite-vue3-4](https://cdn.jsdelivr.net/gh/JS-banana/images/vuepress/vite-vue3-4.jpg)
 
-## 更新记录
+## 提交规范 husky
+- `vscode` 安装 `Commit Message Editor` 或 `git-commit-plugin`
+ 插件，统一提交规范,`git-commit-plugin`需要在 扩展设置> Show Emoji 取消勾选，并在提交时不填`scope`信息
+- 建议各功能点代码分多次提交，不要集中到一起提交，可集中推送
 
-- 2022.01.18
-  - 增加环境变量配置文件 `.env`/`.env.development`/`.env.production`
-- 2022.03.09
-  - 为了优化服务器构建，移除 `auto-imports.d.ts`、`components.d.ts`的git记录，加入`.gitignore`
-  - 域名二级目录的路由配置优化 `history: createWebHistory(import.meta.env.BASE_URL)`
-  - 路由模式由 hash调整为 history
-- 2022.05.07
-  - 添加路由动效`transition`，优化用户体验，并抽离封装`Breadcrumb`组件
-  - 添加权限指令`v-role`，调整权限逻辑，`Table`相关组件有所改动（配合该篇文章食用[多级别权限设计思考及实战](https://ssscode.com/pages/ff7971/)）
+- mac系统在提交时可能没有权限
+```sh
+chmod ug+x .husky/*
+chmod ug+x .git/hooks/*
+```
 
-## 计划
+## Composition Api
 
-- [ ] 主题换肤功能
-- [ ] 引入 `tailwindcss`
-- [ ] `ant-design-vue` 升级到 3.x版本
+- `ref`、 `reactive`、`useRouter` 等 `api` 不用手动 `import`
+- `AutoImport` 插件已帮忙处理
 
-## 感谢star
 
-[![Stargazers over time](https://starchart.cc/JS-banana/vite-vue3-ts.svg)](https://starchart.cc/JS-banana/vite-vue3-ts)
+
+
+
+
+## pinia & setup
+
+pinia支持传统`vuex`写法和函数式写法
+
+- 传统写法
+  ```javascript
+  import {defineStore} from 'pinia'
+  export const useHomeStore = defineStore({
+    data:()=>({
+      count:0
+    }),
+
+    actions:{
+      increment(){
+        this.count++
+      }
+    }
+  })
+
+  <!-- 使用 -->
+  const store = useHomeStore();
+  store.increment()
+  store.$patch({ count: store.count + 1 })
+
+  ```
+
+- 函数式写法
+  ```javascript
+  import {defineStore} from 'pinia'
+  export const useHomeStore = defineStore('home',()=>{
+    const count = ref(0)
+    const increment = () =>{
+      count.value++
+    }
+
+    return {count, increment}
+  })
+
+  <!-- 使用 -->
+  const { count, increment } = useHomeStore();
+
+  ```
+
+
+
+在使用过程中要注意以下内容：
+
+- 不能直接解构
+```
+const { count, increment } = useHomeStore();
+```
+解构`count`会失去响应性,可直接通过`store`的方式取值
+```
+const store = userHomeStore()
+<div>{{store.count}}</div>
+```
+
+- 使用计算属性
+ ```
+const count = computed(()=>store.count)
+```
+
+- 使用`pinia`提供的`storeToRefs`
+```
+const {count} = storeToRefs(store)
+```
