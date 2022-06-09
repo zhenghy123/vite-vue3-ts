@@ -12,7 +12,12 @@
       </a-form-item>
       <p class="text">密码</p>
       <a-form-item name="password">
-        <a-input class="reset-input" v-model:value="formModel.password" type="password" placeholder="zhy">
+        <a-input
+          class="reset-input"
+          v-model:value="formModel.password"
+          type="password"
+          placeholder="zhy"
+        >
           <template #prefix>
             <!-- <lock-outlined class="icon" /> -->
             <Icon size="24px" type="shurumimadenglu" class="icon" />
@@ -23,12 +28,17 @@
       <a-form-item name="password">
         <a-row type="flex">
           <a-col flex="auto">
-            <a-input class="reset-input" v-model:value="formModel.code" type="password" placeholder="请输入验证码">
-            </a-input>
+            <a-input
+              class="reset-input"
+              v-model:value="formModel.code"
+              type="password"
+              placeholder="请输入验证码"
+            />
           </a-col>
-          <a-col flex="100px"> <img @click="flushCode" :src="formModel.msgCode" alt="s" class="img-code" /></a-col>
+          <a-col flex="100px">
+            <img @click="flushCode" :src="formModel.msgCode" alt="s" class="img-code"
+          /></a-col>
         </a-row>
-
       </a-form-item>
       <!-- <a-form-item>
         <a-row>
@@ -47,154 +57,146 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useUserStore } from '/@/store/modules/user';
-import { get_imgCode, post_login } from '/@/api/user/index'
-import md5 from 'js-md5'
+  import { useUserStore } from '/@/store/modules/user';
+  import { get_imgCode, post_login } from '/@/api/user/index';
+  import md5 from 'js-md5';
 
-const userStore = useUserStore();
-const router = useRouter();
+  const userStore = useUserStore();
+  const router = useRouter();
 
-const loading = ref(false);
+  const loading = ref(false);
 
-let state: any = reactive({
-  otherQuery: {},
-  redirect: undefined,
-});
+  let state: any = reactive({
+    otherQuery: {},
+    redirect: undefined,
+  });
 
-/* listen router change  */
-const route = useRoute();
-let getOtherQuery = (query: any) => {
-  return Object.keys(query).reduce((acc: any, cur) => {
-    if (cur !== 'redirect') {
-      acc[cur] = query[cur];
-    }
-    return acc;
-  }, {});
-};
+  /* listen router change  */
+  const route = useRoute();
+  let getOtherQuery = (query: any) => {
+    return Object.keys(query).reduce((acc: any, cur) => {
+      if (cur !== 'redirect') {
+        acc[cur] = query[cur];
+      }
+      return acc;
+    }, {});
+  };
 
-watch(
-  route,
-  (route) => {
-    const query = route.query;
-    if (query) {
-      state.redirect = query.redirect;
-      state.otherQuery = getOtherQuery(query);
-    }
-  },
-  { immediate: true },
-);
+  watch(
+    route,
+    (route) => {
+      const query = route.query;
+      if (query) {
+        state.redirect = query.redirect;
+        state.otherQuery = getOtherQuery(query);
+      }
+    },
+    { immediate: true },
+  );
 
-const rules = {
-  username: [{ required: true, trigger: 'blur', message: '请输入手机号' }],
-  password: [{ required: true, trigger: 'blur', message: '请输入密码' }],
-};
+  const rules = {
+    username: [{ required: true, trigger: 'blur', message: '请输入手机号' }],
+    password: [{ required: true, trigger: 'blur', message: '请输入密码' }],
+  };
 
-const checked = ref(true);
-const formModel = reactive({
-  username: '',
-  password: '',
-  code: '',
-  timestamp: 0,
-  msgCode: ''
-});
+  const checked = ref(true);
+  const formModel = reactive({
+    username: '',
+    password: '',
+    code: '',
+    timestamp: 0,
+    msgCode: '',
+  });
 
+  const flushCode = () => {
+    formModel.timestamp = new Date().getTime();
+    formModel.msgCode = get_imgCode(formModel.timestamp);
+  };
+  onMounted(flushCode);
 
-
-const flushCode = () => {
-  formModel.timestamp = new Date().getTime()
-  formModel.msgCode = get_imgCode(formModel.timestamp)
-}
-onMounted(flushCode)
-
-const handleFinish = () => {
-  // console.log(checked, values);
-  loading.value = true;
-  let params = {
-    username: formModel.username,
-    password: md5(formModel.password),
-    captchaCode: formModel.code,
-    captchaId: String(formModel.timestamp),
-    tenantId: 'ivoddev',
-  }
-  post_login(params).then(({ result }: any) => {
-    sessionStorage.setItem('token', result.token)
-    sessionStorage.setItem(
-      'userInfo',
-      JSON.stringify(result)
-    )
-    let authorities = result.authorities.map(
-      (item) => item.authority
-    )
-    sessionStorage.setItem(
-      'authorities',
-      JSON.stringify(authorities)
-    )
-    router.replace('/');
-  }).finally(() => {
-    loading.value = false;
-  })
-  // message.success('成功');
-  // router.replace({ path: state.redirect || '/', query: state.otherQuery });
-};
+  const handleFinish = () => {
+    // console.log(checked, values);
+    loading.value = true;
+    let params = {
+      username: formModel.username,
+      password: md5(formModel.password),
+      captchaCode: formModel.code,
+      captchaId: String(formModel.timestamp),
+      tenantId: 'ivoddev',
+    };
+    post_login(params)
+      .then(({ result }: any) => {
+        sessionStorage.setItem('token', result.token);
+        sessionStorage.setItem('userInfo', JSON.stringify(result));
+        let authorities = result.authorities.map((item) => item.authority);
+        sessionStorage.setItem('authorities', JSON.stringify(authorities));
+        router.replace('/');
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+    // message.success('成功');
+    // router.replace({ path: state.redirect || '/', query: state.otherQuery });
+  };
 </script>
 <style lang="less">
-.form_box {
-  margin-top: 30px;
+  .form_box {
+    margin-top: 30px;
 
-  .btn {
-    width: 100%;
-    height: 54px;
-    background: linear-gradient(90deg, #00c3fd 0%, #3662f4 100%);
-    border-radius: 6px;
-    color: #ffffff;
-    font-size: 20px;
+    .btn {
+      width: 100%;
+      height: 54px;
+      background: linear-gradient(90deg, #00c3fd 0%, #3662f4 100%);
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 20px;
 
-    &:hover {
-      opacity: 0.85;
-      border: none;
-    }
-  }
-
-  .icon {
-    color: #666666;
-  }
-
-  .text {
-    font-size: 14px;
-    line-height: 20px;
-    color: #999999;
-    letter-spacing: 1.1px;
-    margin-bottom: 10px;
-  }
-
-  .gray_text {
-    font-size: 12px;
-    color: #666666;
-  }
-
-  .reset_checkbox {
-    .ant-checkbox-inner {
-      border-radius: 50%;
+      &:hover {
+        opacity: 0.85;
+        border: none;
+      }
     }
 
-    &>span:last-child {
+    .icon {
+      color: #666666;
+    }
+
+    .text {
+      font-size: 14px;
+      line-height: 20px;
+      color: #999999;
+      letter-spacing: 1.1px;
+      margin-bottom: 10px;
+    }
+
+    .gray_text {
       font-size: 12px;
       color: #666666;
     }
-  }
 
-  .reset-input {
-    height: 50px;
-    line-height: 50px;
-    border: 1px solid #707070;
-    border-radius: 6px;
-  }
+    .reset_checkbox {
+      .ant-checkbox-inner {
+        border-radius: 50%;
+      }
 
-  .copyright {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #999999;
-    opacity: 0.85;
+      & > span:last-child {
+        font-size: 12px;
+        color: #666666;
+      }
+    }
+
+    .reset-input {
+      height: 50px;
+      line-height: 50px;
+      border: 1px solid #707070;
+      border-radius: 6px;
+    }
+
+    .copyright {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #999999;
+      opacity: 0.85;
+    }
   }
-}
 </style>
