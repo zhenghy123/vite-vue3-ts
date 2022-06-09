@@ -1,11 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { API_PREFIX } from '../../config/constant';
-import { ResData } from '../api/global';
 import { getToken } from './auth';
-import { useUserStoreWithOut } from '../store/modules/user';
 import { useMessage } from '../hooks/useMessage';
-// import { WhiteList } from './permission';
-// import { usePermissioStoreWithOut } from '/@/store/modules/permission';
+import { router } from '/@/router';
 
 const { createMessage } = useMessage();
 // baseURL
@@ -17,27 +14,13 @@ const instance = axios.create({
   timeout: 10000,
 });
 
+// 请求拦截
 instance.interceptors.request.use(
-  (config) => {
-    // 接口权限拦截
-    // const store = usePermissioStoreWithOut();
-    // const { url = '' } = config;
-    // if (!WhiteList.includes(url) && store.getIsAdmin === 0) {
-    //   if (!store.getAuths.includes(url)) {
-    //     console.log('url', url, store.getIsAdmin);
-    //     return Promise.reject('没有操作权限');
-    //   }
-    // }
-
+  (config: any) => {
     // 请求头 token配置
     const token = getToken();
-
     if (token) {
-      config.headers = {
-        ...config.headers,
-        Authorization: token,
-      };
-      // config.headers['Authorization'] = token;
+      config.headers.Authorization = token;
     }
     return config;
   },
@@ -46,28 +29,59 @@ instance.interceptors.request.use(
   },
 );
 
+// 响应拦截
 instance.interceptors.response.use(
   (response) => {
-    const res = response.data as ResData<any>;
-    // 正确状态
-    if (res.code === 0) {
-      return res.result || true;
+    const code = response.data.code;
+    if (['90000', '0', 'success', '200'].includes(code)) {
+      return response;
+    } else {
+      createMessage.error(response.data.msg);
+      return Promise.reject(response.data.msg);
     }
-
-    // 登录失效
-    if (res.code === -1) {
-      useUserStoreWithOut().logout();
-    }
-
-    // 异常
-    createMessage.error(res.message);
-    return undefined;
   },
-  (error) => {
-    console.log('err' + error); // for debug
-    // 没权限时，不再重复提示
-    if (error === '没有操作权限') return;
-    createMessage.error('网络超时，稍后再试吧');
+  (err) => {
+    let errMsg = '';
+    if (err && err.response) {
+    } else {
+      errMsg = err.data.error || err.data.message || err.data.msg;
+      switch (err.response.status) {
+        case 401:
+          errMsg = '登录状态失效，请重新登录';
+          // sessionStorage.removeItem('token');
+          router.push('/login');
+          break;
+        case 403:
+          errMsg = '拒绝访问';
+          break;
+        case 408:
+          errMsg = '请求超时';
+          break;
+        case 500:
+          errMsg = '服务器内部错误';
+          break;
+        case 501:
+          errMsg = '服务未实现';
+          break;
+        case 502:
+          errMsg = '网关错误';
+          break;
+        case 503:
+          errMsg = '服务不可用';
+          break;
+        case 504:
+          errMsg = '网关超时';
+          break;
+        case 505:
+          errMsg = 'HTTP版本不受支持';
+          break;
+        default:
+          errMsg = err.response.data.error || err.response.data.message || err.response.data.msg;
+          break;
+      }
+    }
+    createMessage.error(errMsg);
+    return Promise.reject(errMsg);
   },
 );
 
