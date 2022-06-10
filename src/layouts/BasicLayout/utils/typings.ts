@@ -52,6 +52,7 @@ export interface MenuDataItem {
   path: string;
   name?: string | symbol;
   meta?: MetaRecord;
+  hidden?: boolean;
   /**
    * @name 子菜单
    */

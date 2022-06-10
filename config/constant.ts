@@ -4,7 +4,7 @@
  */
 
 // 应用名
-export const APP_TITLE = 'video-together-web';
+export const APP_TITLE = 'wd-vue3-vite-antV-tmp';
 
 // 本地服务端口
 export const VITE_PORT = 3007;

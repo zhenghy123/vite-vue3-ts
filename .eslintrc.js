@@ -40,6 +40,7 @@ module.exports = defineConfig({
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     'vue/require-prop-types': 'off',
+    'vue/no-unused-vars': 'off',
     // [
     //   'error',
     //   {

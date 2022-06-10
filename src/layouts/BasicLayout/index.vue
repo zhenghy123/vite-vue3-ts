@@ -43,17 +43,18 @@
   import Header from './components/Header.vue';
   import SideMenu from './components/SideMenu';
   import { clearMenuItem, filterRoutes } from './utils';
+  import { accessRoutes } from '/@/router/router.config';
 
   const router = useRouter();
 
   const menuData = filterRoutes(
-    clearMenuItem(router.getRoutes()).filter((n) => n.path.startsWith('/app/')),
+    clearMenuItem(router.getRoutes()).filter((n) => n.path.startsWith('/')),
   );
 
   const layoutConf = reactive({
     theme: 'light',
     menuWidth: 208,
-    menuData,
+    menuData: accessRoutes[0].children,
   });
 
   const routeMeta = computed(() => router.currentRoute.value.meta);

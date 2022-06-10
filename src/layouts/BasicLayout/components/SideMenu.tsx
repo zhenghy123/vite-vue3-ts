@@ -18,7 +18,6 @@ export default defineComponent({
       default: 208,
     },
     menuData: {
-      type: Array as PropType<MenuDataItem[]>,
       default: () => [],
     },
   },
@@ -46,9 +45,9 @@ export default defineComponent({
     const getIcon = (type?: string) => (type ? <Icon type={type} /> : null);
 
     // 构建树结构
-    const makeTreeDom = (data: MenuDataItem[]): JSX.Element[] => {
+    const makeTreeDom = (data: MenuDataItem[]): any => {
       return data.map((item: MenuDataItem) => {
-        if (item.children) {
+        if (item.children && item.children.length != 0) {
           return (
             <Menu.SubMenu
               key={item.path}
@@ -63,7 +62,7 @@ export default defineComponent({
             </Menu.SubMenu>
           );
         }
-        return (
+        return item.meta?.hidden ? null : (
           <Menu.Item key={item.path}>
             {getIcon(item.meta?.icon as string)}
             <span>{item.meta?.title}</span>
@@ -87,7 +86,7 @@ export default defineComponent({
           // collapsedWidth={48}
         >
           {/* logo */}
-          <Transition name="fade-top">
+          {/* <Transition name="fade-top">
             {!state.collapsed && (
               <div class="my-sideMenu-sider_logo">
                 <Space align="center" class="link">
@@ -96,7 +95,7 @@ export default defineComponent({
                 </Space>
               </div>
             )}
-          </Transition>
+          </Transition> */}
           {/* menu */}
           <Menu
             theme="light"

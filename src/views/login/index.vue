@@ -5,7 +5,6 @@
         <div class="title_box">
           <h2 class="title"> 账密登录</h2>
         </div>
-        <!-- form -->
         <login-form />
       </div>
     </a-card>
@@ -13,7 +12,6 @@
 </template>
 <script setup lang="ts">
   import LoginForm from './Form.vue';
-  // import { APP_TITLE } from '../../../config/constant';
 </script>
 <style lang="less" scoped>
   .login-container {

@@ -4,7 +4,6 @@
       <router-link :to="{ path: '/' }">
         <img :src="logo" class="logo" />
         <h1 class="title"> {{ APP_TITLE }} </h1>
-        <!-- <span class="subTitle">基础版</span> -->
       </router-link>
     </div>
     <div>
@@ -28,19 +27,23 @@
     background: #ffffff;
     box-shadow: 0 1px 4px #00152914;
     z-index: 1;
+
     .logo-wrap {
       height: 100%;
+
       a {
         display: flex;
         align-items: center;
         height: 100%;
       }
+
       .title {
         margin: 0;
         margin-left: 12px;
         font-size: 18px;
         color: #000000;
       }
+
       .logo {
         width: 48px;
         height: 48px;

@@ -5,7 +5,6 @@
       <a-form-item name="username">
         <a-input class="reset-input" v-model:value="formModel.username" placeholder="zhy">
           <template #prefix>
-            <!-- <user-outlined class="icon" type="user" /> -->
             <Icon size="24px" type="shoujihaodenglu" class="icon" />
           </template>
         </a-input>
@@ -19,7 +18,6 @@
           placeholder="zhy"
         >
           <template #prefix>
-            <!-- <lock-outlined class="icon" /> -->
             <Icon size="24px" type="shurumimadenglu" class="icon" />
           </template>
         </a-input>
@@ -36,70 +34,29 @@
             />
           </a-col>
           <a-col flex="100px">
-            <img @click="flushCode" :src="formModel.msgCode" alt="s" class="img-code"
-          /></a-col>
+            <img @click="flushCode" :src="formModel.msgCode" alt="s" class="img-code" />
+          </a-col>
         </a-row>
       </a-form-item>
-      <!-- <a-form-item>
-        <a-row>
-          <a-col :span="12">
-            <a-checkbox class="reset_checkbox" v-model:checked="checked">自动登录</a-checkbox>
-          </a-col>
-          <a-col :span="12" class="text-right">
-          </a-col>
-        </a-row>
-      </a-form-item> -->
       <a-form-item>
-        <a-button html-type="submit" class="btn" :loading="loading">立即登录</a-button>
+        <a-button html-type="submit" class="btn" block :loading="loading">立即登录</a-button>
       </a-form-item>
     </a-form>
-    <!-- <p class="copyright">@copyright JS-banana</p> -->
+    <p class="copyright">@copyright by wondertek</p>
   </div>
 </template>
 <script setup lang="ts">
-  import { useUserStore } from '/@/store/modules/user';
   import { get_imgCode, post_login } from '/@/api/user/index';
   import md5 from 'js-md5';
 
-  const userStore = useUserStore();
   const router = useRouter();
-
   const loading = ref(false);
-
-  let state: any = reactive({
-    otherQuery: {},
-    redirect: undefined,
-  });
-
-  /* listen router change  */
-  const route = useRoute();
-  let getOtherQuery = (query: any) => {
-    return Object.keys(query).reduce((acc: any, cur) => {
-      if (cur !== 'redirect') {
-        acc[cur] = query[cur];
-      }
-      return acc;
-    }, {});
-  };
-
-  watch(
-    route,
-    (route) => {
-      const query = route.query;
-      if (query) {
-        state.redirect = query.redirect;
-        state.otherQuery = getOtherQuery(query);
-      }
-    },
-    { immediate: true },
-  );
 
   const rules = {
     username: [{ required: true, trigger: 'blur', message: '请输入手机号' }],
     password: [{ required: true, trigger: 'blur', message: '请输入密码' }],
   };
 
-  const checked = ref(true);
   const formModel = reactive({
     username: '',
     password: '',
@@ -112,10 +69,10 @@
     formModel.timestamp = new Date().getTime();
     formModel.msgCode = get_imgCode(formModel.timestamp);
   };
+
   onMounted(flushCode);
 
   const handleFinish = () => {
-    // console.log(checked, values);
     loading.value = true;
     let params = {
       username: formModel.username,
@@ -124,6 +81,7 @@
       captchaId: String(formModel.timestamp),
       tenantId: 'ivoddev',
     };
+
     post_login(params)
       .then(({ result }: any) => {
         sessionStorage.setItem('token', result.token);
@@ -134,9 +92,8 @@
       })
       .finally(() => {
         loading.value = false;
+        flushCode();
       });
-    // message.success('成功');
-    // router.replace({ path: state.redirect || '/', query: state.otherQuery });
   };
 </script>
 <style lang="less">
@@ -144,7 +101,6 @@
     margin-top: 30px;
 
     .btn {
-      width: 100%;
       height: 54px;
       background: linear-gradient(90deg, #00c3fd 0%, #3662f4 100%);
       border-radius: 6px;
@@ -167,22 +123,6 @@
       color: #999999;
       letter-spacing: 1.1px;
       margin-bottom: 10px;
-    }
-
-    .gray_text {
-      font-size: 12px;
-      color: #666666;
-    }
-
-    .reset_checkbox {
-      .ant-checkbox-inner {
-        border-radius: 50%;
-      }
-
-      & > span:last-child {
-        font-size: 12px;
-        color: #666666;
-      }
     }
 
     .reset-input {
