@@ -1,6 +1,6 @@
 <template>
   <a-table bordered :data-source="dataSource" :columns="columns">
-    <template #bodyCell="{ column, record }">
+    <template #bodyCell="{ column }">
       <template v-if="column.dataIndex === 'operation'">
         <a> 编辑 </a>
         <a> 删除 </a>

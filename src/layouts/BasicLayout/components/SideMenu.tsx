@@ -1,8 +1,8 @@
-import { Layout, Menu, Space } from 'ant-design-vue';
+import { Layout, Menu } from 'ant-design-vue';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue';
 import Icon from '/@/components/Icon/index.vue';
-import { PropType, h, Transition } from 'vue';
-import { MenuDataItem } from '../utils/typings';
+import { h } from 'vue';
+// import { MenuDataItem } from '../utils/typings';
 import { router } from '/@/router';
 import './index.less';
 
@@ -18,6 +18,7 @@ export default defineComponent({
       default: 208,
     },
     menuData: {
+      type: Array,
       default: () => [],
     },
   },
@@ -45,8 +46,8 @@ export default defineComponent({
     const getIcon = (type?: string) => (type ? <Icon type={type} /> : null);
 
     // 构建树结构
-    const makeTreeDom = (data: MenuDataItem[]): any => {
-      return data.map((item: MenuDataItem) => {
+    const makeTreeDom = (data): any => {
+      return data.map((item) => {
         if (item.children && item.children.length != 0) {
           return (
             <Menu.SubMenu

@@ -41,6 +41,7 @@ module.exports = defineConfig({
     '@typescript-eslint/no-unused-vars': 'off',
     'vue/require-prop-types': 'off',
     'vue/no-unused-vars': 'off',
+    'no-unused-vars': 'off',
     // [
     //   'error',
     //   {

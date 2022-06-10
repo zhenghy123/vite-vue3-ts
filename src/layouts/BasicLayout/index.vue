@@ -42,14 +42,14 @@
   import { Route } from 'ant-design-vue/es/breadcrumb/Breadcrumb';
   import Header from './components/Header.vue';
   import SideMenu from './components/SideMenu';
-  import { clearMenuItem, filterRoutes } from './utils';
+  // import { clearMenuItem, filterRoutes } from './utils';
   import { accessRoutes } from '/@/router/router.config';
 
   const router = useRouter();
 
-  const menuData = filterRoutes(
-    clearMenuItem(router.getRoutes()).filter((n) => n.path.startsWith('/')),
-  );
+  // const menuData = filterRoutes(
+  //   clearMenuItem(router.getRoutes()).filter((n) => n.path.startsWith('/')),
+  // );
 
   const layoutConf = reactive({
     theme: 'light',
