@@ -59,13 +59,14 @@
         font-size: 16px;
         font-weight: 600;
         line-height: 22px;
-        color: rgba(0, 0, 0, 0.85);
+        color: @font-color;
         margin: 0 8px 0 4px;
       }
     }
 
     .my-icon {
       font-size: 18px !important;
+      color: @font-color;
     }
   }
 
@@ -77,7 +78,7 @@
   }
 
   .menu-box :deep(.ant-dropdown-menu-item-selected) {
-    background: #eaeffe;
-    color: #3860f4;
+    background: @background-color;
+    color: @font-color;
   }
 </style>

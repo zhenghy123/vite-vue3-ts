@@ -24,7 +24,7 @@
     height: 100%;
     height: 80px;
     padding: 0 16px;
-    background: #ffffff;
+    background: @background-color;
     box-shadow: 0 1px 4px #00152914;
     z-index: 1;
 
@@ -41,7 +41,7 @@
         margin: 0;
         margin-left: 12px;
         font-size: 18px;
-        color: #000000;
+        color: @font-color;
       }
 
       .logo {

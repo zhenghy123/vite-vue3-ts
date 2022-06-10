@@ -85,7 +85,7 @@
       overflow-y: auto;
       margin: 0;
       padding: 24px;
-      background: '#F0F1F4';
+      background: '#3860F4';
     }
   }
 </style>

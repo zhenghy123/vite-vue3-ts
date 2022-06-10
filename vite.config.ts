@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import { createVitePlugins } from './config/vite/plugin';
 import proxy from './config/vite/proxy';
 import { VITE_DROP_CONSOLE, VITE_PORT } from './config/constant';
-import { generateModifyVars } from './config/themeConfig';
+import { generateModifyVars } from './config/generateModifyVars';
 import { configManualChunk } from './config/vite/optimizer';
 const packageName = require('./package.json').name;
 
